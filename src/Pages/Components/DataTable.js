@@ -2,9 +2,9 @@ import React from "react";
 
 const DataTable = ({ data, columns }) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white">
-        <thead className="bg-gray-800 text-white">
+    <div className="overflow-x-auto max-w-7xl mx-auto">
+      <table className="table-auto w-full border-collapse border border-gray-200">
+        <thead className="bg-gray-200">
           <tr>
             {columns.map((col) => (
               <th

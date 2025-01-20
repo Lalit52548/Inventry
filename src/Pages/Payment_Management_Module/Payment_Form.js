@@ -1,4 +1,3 @@
-// PopupForm.js
 import React from "react";
 
 const Payment_Form = ({ formData, onClosePopup, onFormDataChange }) => {

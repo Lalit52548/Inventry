@@ -1,4 +1,3 @@
-// weekly_payment_website.js
 import React, { useState } from "react";
 
 const WeeklyPayment = ({ formData, onOpenPopup }) => (

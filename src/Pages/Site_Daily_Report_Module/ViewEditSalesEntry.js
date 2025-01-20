@@ -2,16 +2,43 @@ import React, { useState } from "react";
 
 const ViewEditSalesEntry = ({ entry, closeModal }) => {
   const [formData, setFormData] = useState(entry || {});
+  const [isSubmitting, setIsSubmitting] = useState(false); // To manage the submit state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const updateEntry = async (updatedData) => {
+    try {
+      setIsSubmitting(true);
+      const response = await fetch("https://example.com/api/updateEntry", {
+        method: "PUT", // Use "POST" if your API expects it
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update entry");
+      }
+
+      const result = await response.json();
+      console.log("Update successful:", result);
+      // Optional: Handle success notification here
+    } catch (error) {
+      console.error("Error updating entry:", error);
+      // Optional: Handle error notification here
+    } finally {
+      setIsSubmitting(false);
+      closeModal(); // Close the modal regardless of success/failure
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Updated Data", formData);
-    closeModal();
+    updateEntry(formData);
   };
 
   return (
@@ -169,7 +196,7 @@ const ViewEditSalesEntry = ({ entry, closeModal }) => {
               className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </label>
-        </div>
+          </div>
         <div className="flex justify-end mt-6">
           <button
             type="button"
@@ -180,9 +207,12 @@ const ViewEditSalesEntry = ({ entry, closeModal }) => {
           </button>
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ${
+              isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            disabled={isSubmitting}
           >
-            Submit
+            {isSubmitting ? "Submitting..." : "Submit"}
           </button>
         </div>
       </form>
